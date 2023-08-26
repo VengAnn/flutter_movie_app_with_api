@@ -23,8 +23,8 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  const App({required this.movieRespository, super.key});
-  final MovieRespository movieRespository;
+  const App({this.movieRespository, super.key});
+  final MovieRespository? movieRespository;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +36,7 @@ class App extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        title: "Movie DB API",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(),
         home: const MoviePage(),

@@ -19,6 +19,7 @@ class MovieRespositoryImpl implements MovieRespository {
         return Right(model);
       }
       return left('Error get discover movies');
+      // ignore: deprecated_member_use
     } on DioError catch (e) {
       if (e.response != null) {
         return Left(e.response.toString());

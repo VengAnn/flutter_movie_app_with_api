@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../app_constant.dart';
 
-class ImageNetwork extends StatelessWidget {
-  const ImageNetwork(
+class ImageNetworkWidget extends StatelessWidget {
+  const ImageNetworkWidget(
       {super.key,
       required this.imageSrc,
       this.hieght,

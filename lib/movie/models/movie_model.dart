@@ -41,10 +41,10 @@ class MovieModel {
   final int voteCount;
 
   factory MovieModel.fromMap(Map<String, dynamic> json) => MovieModel(
-        backdropPath: json["backdrop_path"] ?? '',
+        backdropPath: json["backdrop_path"],
         id: json["id"],
         overview: json["overview"],
-        posterPath: json["poster_path"] ?? '',
+        posterPath: json["poster_path"],
         title: json["title"],
         voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],

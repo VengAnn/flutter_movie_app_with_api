@@ -29,4 +29,24 @@ class MovieRespositoryImpl implements MovieRespository {
       //throw e.toString();
     }
   }
+
+  @override
+  Future<Either<String, MovieResponseModel>> getTopRated({int page = 1}) async {
+    try {
+      final result =
+          await dio!.get('/movie/top_rated', queryParameters: {'page': page});
+      if (result.statusCode == 200 && result.data != null) {
+        final model = MovieResponseModel.fromMap(result.data);
+        return right(model);
+      }
+      // ignore: deprecated_member_use
+    } on DioError catch (e) {
+      if (e.response != null) {
+        return left(e.response.toString());
+      }
+      //
+      return left('Another error on get TopRated movie');
+    }
+    throw Exception('get TopRated method completed without returning a value');
+  }
 }

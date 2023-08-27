@@ -3,28 +3,30 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
 import 'package:movie_app_with_api/movie/repositories/movie_respository.dart';
 
-class MovieGetDiscoverProvider with ChangeNotifier {
-  final MovieRespository? movieResposity;
-  MovieGetDiscoverProvider({this.movieResposity});
+class MovieGetTopRatedProvider with ChangeNotifier {
+  final MovieRespository? movieRespository;
 
+  MovieGetTopRatedProvider({this.movieRespository});
+
+  // ignore: prefer_final_fields
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
   final List<MovieModel> _movies = [];
   List<MovieModel> get movies => _movies;
 
-  void getDiscover(BuildContext context) async {
+  void getTopRated(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
+    final result = await movieRespository!.getTopRated();
 
-    final result = await movieResposity!.getDiscover();
-    print(result);
     result.fold(
-      (errorMessage) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(errorMessage),
-        ));
-        // ignore: avoid_print
-        print(errorMessage); ////
+      (messageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(messageError),
+          ),
+        );
         _isLoading = false;
         notifyListeners();
         return;
@@ -34,26 +36,27 @@ class MovieGetDiscoverProvider with ChangeNotifier {
         _movies.addAll(response.results);
         _isLoading = false;
         notifyListeners();
-        return null;
+        return;
       },
     );
   }
 
-  //
-  void getDiscoverWithPagination(
+  void getTopRatedWithPagination(
     BuildContext context, {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await movieResposity!.getDiscover(page: page);
+    final result = await movieRespository!.getTopRated();
     result.fold(
-      (errorMessage) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(errorMessage),
-        ));
+      (messageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(messageError),
+          ),
+        );
 
-        pagingController.error = errorMessage;
-        // print("error this: $errorMessage");
+        pagingController.error = messageError;
+
         return;
       },
       (response) {
@@ -62,7 +65,7 @@ class MovieGetDiscoverProvider with ChangeNotifier {
         } else {
           pagingController.appendPage(response.results, page + 1);
         }
-        return null;
+        return;
       },
     );
   }

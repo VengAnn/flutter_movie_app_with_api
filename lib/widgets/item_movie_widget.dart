@@ -29,7 +29,7 @@ class ItemMovieWidget extends Container {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: ImageNetwork(
+            child: ImageNetworkWidget(
               imageSrc: "${movie.backdropPath}",
               hieght: hieghtBackdrop,
               width: widthBackdrop,
@@ -57,7 +57,7 @@ class ItemMovieWidget extends Container {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ImageNetwork(
+                ImageNetworkWidget(
                   imageSrc: "${movie.posterPath}",
                   width: widthPoster,
                   hieght: heightposter,

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_discover_provider.dart';
+import 'package:movie_app_with_api/movie/provider/movie_get_top_rated_provider.dart';
 import 'package:movie_app_with_api/widgets/item_movie_widget.dart';
 import 'package:provider/provider.dart';
 
-class MoviePaginationPage extends StatefulWidget {
-  const MoviePaginationPage({super.key});
+enum TypeMovie { discover, topRated }
 
+class MoviePaginationPage extends StatefulWidget {
+  const MoviePaginationPage({super.key, required this.type});
+  final TypeMovie type;
   @override
   State<MoviePaginationPage> createState() => _MoviePaginationPageState();
 }
@@ -18,13 +21,26 @@ class _MoviePaginationPageState extends State<MoviePaginationPage> {
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener((pageKey) {
-      context.read<MovieGetDiscoverProvider>().getDiscoverWithPagination(
-            context,
-            pagingController: _pagingController,
-            page: pageKey,
-          );
-    });
+    _pagingController.addPageRequestListener(
+      (pageKey) {
+        switch (widget.type) {
+          case TypeMovie.discover:
+            context.read<MovieGetDiscoverProvider>().getDiscoverWithPagination(
+                  context,
+                  pagingController: _pagingController,
+                  page: pageKey,
+                );
+            break;
+          case TypeMovie.topRated:
+            context.read<MovieGetTopRatedProvider>().getTopRatedWithPagination(
+                  context,
+                  pagingController: _pagingController,
+                  page: pageKey,
+                );
+            break;
+        }
+      },
+    );
     super.initState();
   }
 
@@ -32,7 +48,17 @@ class _MoviePaginationPageState extends State<MoviePaginationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Discover Movie"),
+        title: Builder(
+          builder: (_) {
+            switch (widget.type) {
+              case TypeMovie.discover:
+                return const Text("Discover Movie");
+
+              case TypeMovie.topRated:
+                return const Text("TopRated Movie");
+            }
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

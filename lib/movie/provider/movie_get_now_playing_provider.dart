@@ -3,61 +3,55 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
 import 'package:movie_app_with_api/movie/repositories/movie_respository.dart';
 
-class MovieGetTopRatedProvider with ChangeNotifier {
+class MovieGetNowPlayingProvider with ChangeNotifier {
   final MovieRespository? movieRespository;
 
-  MovieGetTopRatedProvider({this.movieRespository});
+  MovieGetNowPlayingProvider({this.movieRespository});
 
-  // ignore: prefer_final_fields
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool _isLoaing = false;
+  bool get isLoading => _isLoaing;
 
-  final List<MovieModel> _movies = [];
-  List<MovieModel> get movies => _movies;
+  final List<MovieModel> _movie = [];
+  List<MovieModel> get movies => _movie;
 
-  void getTopRated(BuildContext context) async {
-    _isLoading = true;
+  void getNowPlaying(BuildContext context) async {
+    _isLoaing = true;
     notifyListeners();
-    final result = await movieRespository!.getTopRated();
+
+    final result = await movieRespository!.getNowPlaying();
 
     result.fold(
       (messageError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(messageError),
-          ),
+          SnackBar(content: Text(messageError)),
         );
-        _isLoading = false;
+
+        _isLoaing = false;
         notifyListeners();
-        return;
       },
       (response) {
-        _movies.clear();
-        _movies.addAll(response.results);
-        _isLoading = false;
+        _movie.clear();
+        _movie.addAll(response.results);
+
+        _isLoaing = false;
         notifyListeners();
-        return;
       },
     );
   }
 
-  void getTopRatedWithPagination(
+  void getNowPlayingWithPagination(
     BuildContext context, {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await movieRespository!.getTopRated(page: page);
+    final result = await movieRespository!.getNowPlaying(page: page);
+
     result.fold(
       (messageError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(messageError),
-          ),
+          SnackBar(content: Text(messageError)),
         );
-
         pagingController.error = messageError;
-
-        return;
       },
       (response) {
         if (response.results.length < 20) {
@@ -65,7 +59,6 @@ class MovieGetTopRatedProvider with ChangeNotifier {
         } else {
           pagingController.appendPage(response.results, page + 1);
         }
-        return;
       },
     );
   }

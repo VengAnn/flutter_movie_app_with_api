@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app_with_api/movie/components/movie_now_playig_component.dart';
 import 'package:movie_app_with_api/movie/components/movie_top_rated_component.dart';
 import 'package:movie_app_with_api/movie/pages/movie_pagination_page.dart';
 import '../components/movie_discover_component.dart';
@@ -64,6 +65,24 @@ class MoviePage extends StatelessWidget {
           ),
           //
           const MovieTopRatedComponent(),
+          //
+          _WigetTitle(
+            title: 'Now Playing Movies',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return const MoviePaginationPage(
+                      type: TypeMovie.nowPlaying,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+          //
+          const MovieNowPlayingComponent(),
         ],
       ),
     );

@@ -17,7 +17,7 @@ class MovieGetDiscoverProvider with ChangeNotifier {
     notifyListeners();
 
     final result = await movieResposity!.getDiscover();
-    print(result);
+    //print(result);
     result.fold(
       (errorMessage) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

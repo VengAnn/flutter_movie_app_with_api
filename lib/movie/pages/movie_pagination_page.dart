@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_discover_provider.dart';
+import 'package:movie_app_with_api/movie/provider/movie_get_now_playing_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_top_rated_provider.dart';
 import 'package:movie_app_with_api/widgets/item_movie_widget.dart';
 import 'package:provider/provider.dart';
 
-enum TypeMovie { discover, topRated }
+enum TypeMovie { discover, topRated, nowPlaying }
 
 class MoviePaginationPage extends StatefulWidget {
   const MoviePaginationPage({super.key, required this.type});
@@ -38,6 +39,14 @@ class _MoviePaginationPageState extends State<MoviePaginationPage> {
                   page: pageKey,
                 );
             break;
+          case TypeMovie.nowPlaying:
+            context
+                .read<MovieGetNowPlayingProvider>()
+                .getNowPlayingWithPagination(
+                  context,
+                  pagingController: _pagingController,
+                  page: pageKey,
+                );
         }
       },
     );
@@ -56,6 +65,8 @@ class _MoviePaginationPageState extends State<MoviePaginationPage> {
 
               case TypeMovie.topRated:
                 return const Text("TopRated Movie");
+              case TypeMovie.nowPlaying:
+                return const Text("NowPlaying Movie");
             }
           },
         ),

@@ -49,4 +49,26 @@ class MovieRespositoryImpl implements MovieRespository {
     }
     throw Exception('get TopRated method completed without returning a value');
   }
+
+  //
+  @override
+  Future<Either<String, MovieResponseModel>> getNowPlaying(
+      {int page = 1}) async {
+    try {
+      final result =
+          await dio!.get('/movie/now_playing', queryParameters: {'page': page});
+      if (result.statusCode == 200 && result.data != null) {
+        final model = MovieResponseModel.fromMap(result.data);
+        return Right(model);
+      }
+      return const Left("Error get Now Playing Movies");
+      // ignore: deprecated_member_use
+    } on DioError catch (e) {
+      if (e.response != null) {
+        return Left(e.response.toString());
+      }
+      return const Left("Another Error on get Now Playing");
+    }
+    //throw Exception("Erro get Now Playing Movies");
+  }
 }

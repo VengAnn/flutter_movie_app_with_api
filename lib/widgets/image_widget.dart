@@ -23,6 +23,16 @@ class ImageNetworkWidget extends StatelessWidget {
         height: hieght,
         width: width,
         fit: BoxFit.cover,
+        //
+        loadingBuilder: (context, child, loadingProgress) {
+          return Container(
+            height: hieght,
+            width: width,
+            color: Colors.amber,
+            child: child,
+          );
+        },
+        //
         errorBuilder: (_, __, ___) {
           return const SizedBox(
             child: Icon(Icons.broken_image_rounded),

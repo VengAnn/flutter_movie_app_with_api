@@ -10,29 +10,31 @@ class MoviePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        //surfaceTintColor: Colors.black,
-        elevation: 0,
-        centerTitle: true,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                // backgroundImage: AssetImage("assets/images/logo.png"),
-                child: Image.asset("assets/images/logo.png"),
-              ),
-            ),
-            const Text("Movies DB api"),
-          ],
-        ),
-      ),
+      //
       body: CustomScrollView(
         slivers: [
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            elevation: 0,
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    // backgroundImage: AssetImage("assets/images/logo.png"),
+                    child: Image.asset("assets/images/logo.png"),
+                  ),
+                ),
+                const Text("Movies DB api"),
+              ],
+            ),
+          ),
           _WigetTitle(
             title: 'Discover Movies',
             onPressed: () {

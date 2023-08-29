@@ -77,20 +77,23 @@ class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<Either<String, MovieDetailModel>> getDetail({required int id}) async {
     try {
-      final result =
-          await dio!.get('/movie/now_playing', queryParameters: {'id': id});
+      final result = await dio!.get(
+        '/movie/$id',
+      );
+
       if (result.statusCode == 200 && result.data != null) {
         final model = MovieDetailModel.fromMap(result.data);
         return Right(model);
       }
-      return const Left("Error get Detail Movies");
+
+      return const Left('Error get movie detail');
       // ignore: deprecated_member_use
     } on DioError catch (e) {
       if (e.response != null) {
         return Left(e.response.toString());
       }
-      return const Left("Another Error on get Detail Movie");
+
+      return const Left('Another error on get movie detail');
     }
-    //throw Exception("Error get Detail Movies");
   }
 }

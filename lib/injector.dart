@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:movie_app_with_api/movie/provider/movie_get_detail_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_discover_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_now_playing_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_top_rated_provider.dart';
 import 'package:movie_app_with_api/movie/repositories/movie_repository.dart';
 import 'package:movie_app_with_api/movie/repositories/movie_repository_impl.dart';
-
 import 'app_constant.dart';
 
 final sl = GetIt.instance;
@@ -27,6 +27,11 @@ void setUp() {
     () => MovieGetNowPlayingProvider(
       movieRepository: sl(),
     ),
+  );
+
+  //Register with MovieGetDetailProvider
+  sl.registerFactory<MovieGetDetailProvider>(
+    () => MovieGetDetailProvider(sl()),
   );
 
   //Register Repository

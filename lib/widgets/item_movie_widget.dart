@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../movie/models/movie_model.dart';
 import 'image_widget.dart';
 
+// ignore: must_be_immutable
 class ItemMovieWidget extends Container {
   final MovieModel movie;
   // ignore: prefer_typing_uninitialized_variables
@@ -12,6 +13,7 @@ class ItemMovieWidget extends Container {
   final double widthBackdrop;
   final double heightposter;
   final double widthPoster;
+  void Function()? onTap;
 
   ItemMovieWidget({
     required this.movie,
@@ -21,6 +23,7 @@ class ItemMovieWidget extends Container {
     required this.widthBackdrop,
     required this.heightposter,
     required this.widthPoster,
+    this.onTap,
     super.key,
   });
   //declare this constructor to get value from class infinity have value need
@@ -119,6 +122,11 @@ class ItemMovieWidget extends Container {
                   ),
                 );
               }).toList(),
+            ),
+          ),
+          Positioned.fill(
+            child: InkWell(
+              onTap: onTap,
             ),
           ),
         ],

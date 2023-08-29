@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../app_constant.dart';
 
 class ImageNetworkWidget extends StatelessWidget {

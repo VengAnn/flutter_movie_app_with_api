@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_app_with_api/movie/pages/movie_detail_page.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/item_movie_widget.dart';
 import '../provider/movie_get_discover_provider.dart';
@@ -47,14 +48,20 @@ class _MovieDiscoverComponentState extends State<MovieDiscoverComponent> {
               itemBuilder: (_, index, __) {
                 final movie = provider.movies[index];
                 return ItemMovieWidget(
-                  movie: movie,
-                  provider: provider,
-                  currentIndex: currentIndex,
-                  hieghtBackdrop: 300,
-                  widthBackdrop: double.infinity,
-                  heightposter: 160,
-                  widthPoster: 100,
-                );
+                    movie: movie,
+                    provider: provider,
+                    currentIndex: currentIndex,
+                    hieghtBackdrop: 300,
+                    widthBackdrop: double.infinity,
+                    heightposter: 160,
+                    widthPoster: 100,
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return MovieDetailpPage(id: movie.id);
+                        },
+                      ));
+                    });
               },
               carouselController: _carouselController,
               options: CarouselOptions(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
-import 'package:movie_app_with_api/movie/repositories/movie_respository.dart';
+import '../repositories/movie_repository.dart';
 
 class MovieGetNowPlayingProvider with ChangeNotifier {
-  final MovieRespository? movieRespository;
+  final MovieRepository? movieRepository;
 
-  MovieGetNowPlayingProvider({this.movieRespository});
+  MovieGetNowPlayingProvider({this.movieRepository});
 
   bool _isLoaing = false;
   bool get isLoading => _isLoaing;
@@ -18,7 +18,7 @@ class MovieGetNowPlayingProvider with ChangeNotifier {
     _isLoaing = true;
     notifyListeners();
 
-    final result = await movieRespository!.getNowPlaying();
+    final result = await movieRepository!.getNowPlaying();
 
     result.fold(
       (messageError) {
@@ -44,7 +44,7 @@ class MovieGetNowPlayingProvider with ChangeNotifier {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await movieRespository!.getNowPlaying(page: page);
+    final result = await movieRepository!.getNowPlaying(page: page);
 
     result.fold(
       (messageError) {

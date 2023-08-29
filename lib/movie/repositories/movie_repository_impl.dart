@@ -1,12 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:movie_app_with_api/movie/models/movie_detial_model.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
-import 'package:movie_app_with_api/movie/repositories/movie_respository.dart';
+import 'package:movie_app_with_api/movie/repositories/movie_repository.dart';
 
-class MovieRespositoryImpl implements MovieRespository {
+class MovieRepositoryImpl implements MovieRepository {
   final Dio? dio;
   //Constuctor
-  MovieRespositoryImpl({this.dio});
+  MovieRepositoryImpl({this.dio});
   @override
   Future<Either<String, MovieResponseModel>> getDiscover({int page = 1}) async {
     try {
@@ -70,5 +71,26 @@ class MovieRespositoryImpl implements MovieRespository {
       return const Left("Another Error on get Now Playing");
     }
     //throw Exception("Erro get Now Playing Movies");
+  }
+
+  //
+  @override
+  Future<Either<String, MovieDetailModel>> getDetail({required int id}) async {
+    try {
+      final result =
+          await dio!.get('/movie/now_playing', queryParameters: {'id': id});
+      if (result.statusCode == 200 && result.data != null) {
+        final model = MovieDetailModel.fromMap(result.data);
+        return Right(model);
+      }
+      return const Left("Error get Detail Movies");
+      // ignore: deprecated_member_use
+    } on DioError catch (e) {
+      if (e.response != null) {
+        return Left(e.response.toString());
+      }
+      return const Left("Another Error on get Detail Movie");
+    }
+    //throw Exception("Error get Detail Movies");
   }
 }

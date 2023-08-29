@@ -1,12 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../widgets/item_movie_widget.dart';
 import '../provider/movie_get_discover_provider.dart';
 
 class MovieDiscoverComponent extends StatefulWidget {
-  // ignore: unused_element
   const MovieDiscoverComponent({super.key});
 
   @override

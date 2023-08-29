@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
-import 'package:movie_app_with_api/movie/repositories/movie_respository.dart';
+import '../repositories/movie_repository.dart';
 
 class MovieGetTopRatedProvider with ChangeNotifier {
-  final MovieRespository? movieRespository;
+  final MovieRepository? movieRepository;
 
-  MovieGetTopRatedProvider({this.movieRespository});
+  MovieGetTopRatedProvider({this.movieRepository});
 
   // ignore: prefer_final_fields
   bool _isLoading = false;
@@ -18,7 +18,7 @@ class MovieGetTopRatedProvider with ChangeNotifier {
   void getTopRated(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
-    final result = await movieRespository!.getTopRated();
+    final result = await movieRepository!.getTopRated();
 
     result.fold(
       (messageError) {
@@ -46,7 +46,7 @@ class MovieGetTopRatedProvider with ChangeNotifier {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await movieRespository!.getTopRated(page: page);
+    final result = await movieRepository!.getTopRated(page: page);
     result.fold(
       (messageError) {
         ScaffoldMessenger.of(context).showSnackBar(

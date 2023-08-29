@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
-import 'package:movie_app_with_api/movie/repositories/movie_respository.dart';
+import 'package:movie_app_with_api/movie/repositories/movie_repository.dart';
 
 class MovieGetDiscoverProvider with ChangeNotifier {
-  final MovieRespository? movieResposity;
+  final MovieRepository? movieResposity;
   MovieGetDiscoverProvider({this.movieResposity});
 
   bool _isLoading = false;

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app_with_api/movie/models/movie_detial_model.dart';
+import 'package:movie_app_with_api/movie/provider/movie_get_discover_provider.dart';
 import '../movie/models/movie_model.dart';
 import 'image_widget.dart';
 
 // ignore: must_be_immutable
 class ItemMovieWidget extends Container {
-  final MovieModel movie;
+  final MovieModel? movie;
   // ignore: prefer_typing_uninitialized_variables
   final provider;
   final int? currentIndex;
@@ -14,16 +16,18 @@ class ItemMovieWidget extends Container {
   final double heightposter;
   final double widthPoster;
   void Function()? onTap;
+  final MovieDetailModel? movieDetail;
 
   ItemMovieWidget({
-    required this.movie,
-    this.provider,
-    this.currentIndex,
     required this.hieghtBackdrop,
     required this.widthBackdrop,
     required this.heightposter,
     required this.widthPoster,
+    this.movie,
     this.onTap,
+    this.provider,
+    this.currentIndex,
+    this.movieDetail,
     super.key,
   });
   //declare this constructor to get value from class infinity have value need
@@ -33,7 +37,8 @@ class ItemMovieWidget extends Container {
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: ImageNetworkWidget(
-              imageSrc: "${movie.backdropPath}",
+              imageSrc:
+                  "${movieDetail != null ? movieDetail!.backdropPath : movie!.backdropPath}",
               hieght: hieghtBackdrop,
               width: widthBackdrop,
               radius: 10,
@@ -61,14 +66,15 @@ class ItemMovieWidget extends Container {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ImageNetworkWidget(
-                  imageSrc: "${movie.posterPath}",
+                  imageSrc:
+                      "${movieDetail != null ? movieDetail!.posterPath : movie!.backdropPath}",
                   width: widthPoster,
                   hieght: heightposter,
                   radius: 10,
                 ),
                 Text(
                   // ignore: unnecessary_string_interpolations
-                  "${movie.title}",
+                  "${movieDetail != null ? movieDetail!.title : movie!.title}",
                   style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
@@ -82,7 +88,7 @@ class ItemMovieWidget extends Container {
                       color: Colors.amber,
                     ),
                     Text(
-                      "${movie.voteAverage}",
+                      "${movieDetail != null ? movieDetail!.voteAverage : movie!.voteAverage}",
                       style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -90,7 +96,7 @@ class ItemMovieWidget extends Container {
                       width: 8.0,
                     ),
                     Text(
-                      "(${movie.voteCount})",
+                      "(${movieDetail != null ? movieDetail!.voteCount : movie!.voteCount})",
                       style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -103,7 +109,11 @@ class ItemMovieWidget extends Container {
             bottom: 10,
             right: 10,
             child: Row(
-              children: provider.movies.asMap().entries.map<Widget>((entry) {
+              children: MovieGetDiscoverProvider()
+                  .movies
+                  .asMap()
+                  .entries
+                  .map<Widget>((entry) {
                 final index = entry.key;
                 //final movieItem = entry.value;
                 // print(entry);

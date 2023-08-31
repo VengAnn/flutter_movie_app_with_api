@@ -73,7 +73,6 @@ class MovieRepositoryImpl implements MovieRepository {
     //throw Exception("Erro get Now Playing Movies");
   }
 
-  //
   @override
   Future<Either<String, MovieDetailModel>> getDetail({required int id}) async {
     try {

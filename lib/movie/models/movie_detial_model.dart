@@ -35,7 +35,7 @@ class MovieDetailModel {
   final double voteAverage;
   final int voteCount;
 
-  factory MovieDetailModel.fromMap(Map<String, dynamic> json) =>
+  factory MovieDetailModel.fromJson(Map<String, dynamic> json) =>
       MovieDetailModel(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],

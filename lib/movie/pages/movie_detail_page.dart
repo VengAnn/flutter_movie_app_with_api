@@ -1,9 +1,11 @@
-// ignore_for_file: override_on_non_overriding_member
-
 import 'package:flutter/material.dart';
+import 'package:movie_app_with_api/movie/provider/movie_get_videos_provider.dart';
+import 'package:movie_app_with_api/widgets/image_widget.dart';
 import 'package:movie_app_with_api/widgets/item_movie_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../injector.dart';
+import '../../widgets/webview_app_widget.dart';
 import '../provider/movie_get_detail_provider.dart';
 
 class MovieDetailpPage extends StatelessWidget {
@@ -13,12 +15,79 @@ class MovieDetailpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MovieGetDetailProvider>(
-      create: (_) => sl<MovieGetDetailProvider>()..getDetail(context, id: id),
-      builder: (_, __) => Scaffold(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MovieGetDetailProvider>(
+          create: (_) =>
+              sl<MovieGetDetailProvider>()..getDetail(context, id: id),
+        ),
+        ChangeNotifierProvider<MovieGetVideosProvider>(
+          create: (_) =>
+              sl<MovieGetVideosProvider>()..getVideos(context, id: id),
+        ),
+      ],
+      builder: (context, child) => Scaffold(
         body: CustomScrollView(
           slivers: [
             _WidgetAppBar(context: context),
+            Consumer<MovieGetVideosProvider>(
+              builder: (_, provider, __) {
+                final video = provider.videos;
+                if (video != null) {
+                  return SliverToBoxAdapter(
+                    child: _Content(
+                      title: "Trailer",
+                      body: SizedBox(
+                        height: 200,
+                        child: ListView.builder(
+                          // padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: video.results!.length,
+                          itemBuilder: (_, index) {
+                            final vidio = video.results![index];
+                            return Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: ImageNetworkWidget(
+                                    type: TypeSrcImg.external,
+                                    imageSrc: YoutubePlayer.getThumbnail(
+                                        videoId: "${vidio.key}"),
+                                    radius: 10.0,
+                                  ),
+                                ),
+                                //
+                                Positioned.fill(
+                                  child: Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        color: Colors.red,
+                                      ),
+                                      child: const Icon(
+                                        Icons.play_arrow,
+                                        color: Colors.white,
+                                        size: 35.0,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                //if data null show
+                return const SliverToBoxAdapter();
+              },
+            ),
             _WidgetSummary(),
           ],
         ),
@@ -54,16 +123,36 @@ class _WidgetAppBar extends SliverAppBar {
 
   @override
   List<Widget>? get actions => [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.public),
-            ),
-          ),
+        Consumer<MovieGetDetailProvider>(
+          builder: (_, provider, __) {
+            final movie = provider.movie;
+            if (movie != null) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return WebViewAppWidget(
+                              url: movie.homepage,
+                              title: "${movie.title}",
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.public),
+                  ),
+                ),
+              );
+            }
+            return const SizedBox();
+          },
         ),
       ];
   @override
@@ -91,35 +180,49 @@ class _WidgetAppBar extends SliverAppBar {
       );
 }
 
-class _WidgetSummary extends SliverToBoxAdapter {
-  Widget _content({required String title, required Widget body}) {
+// ignore: unused_element
+class _Content extends StatelessWidget {
+  // ignore: unused_element
+  const _Content({super.key, required this.title, required this.body});
+  final String title;
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          // ignore: unnecessary_brace_in_string_interps, unnecessary_string_interpolations
-          "${title}",
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Text(
+            // ignore: unnecessary_brace_in_string_interps, unnecessary_string_interpolations
+            "${title}",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
         ),
         const SizedBox(height: 10.0),
-        body,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: body,
+        ),
         const SizedBox(
           height: 10.0,
         ),
       ],
     );
   }
+}
 
+class _WidgetSummary extends SliverToBoxAdapter {
   TableRow _tableContent({required String title, required String content}) {
     return TableRow(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          // ignore: unnecessary_brace_in_string_interps, unnecessary_string_interpolations
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Text(title),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Text(content),
         ),
       ],
@@ -127,122 +230,118 @@ class _WidgetSummary extends SliverToBoxAdapter {
   }
 
   @override
-  Widget? get child => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer<MovieGetDetailProvider>(
-          builder: (_, provider, __) {
-            final movie = provider.movie;
-            if (movie != null) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _content(
-                    title: "Release Date",
-                    body: Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_month_outlined,
-                          size: 30,
+  Widget? get child => Consumer<MovieGetDetailProvider>(
+        builder: (_, provider, __) {
+          final movie = provider.movie;
+          if (movie != null) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _Content(
+                  title: "Release Date",
+                  body: Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_month_outlined,
+                        size: 30,
+                      ),
+                      //
+                      const SizedBox(
+                        width: 6.0,
+                      ),
+                      Text(
+                        // ignore: unnecessary_string_interpolations
+                        "${movie.releaseDate.toString().split(' ').first}",
+                        style: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
-                        //
-                        const SizedBox(
-                          width: 6.0,
-                        ),
-                        Text(
-                          // ignore: unnecessary_string_interpolations
-                          "${movie.releaseDate.toString().split(' ').first}",
-                          style: const TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                      ),
+                    ],
+                  ),
+                ),
+                //
+                _Content(
+                  title: "Genres",
+                  body: Wrap(
+                    spacing: 6.0,
+                    children: movie.genres
+                        .map((e) => Chip(label: Text(e.name)))
+                        .toList(),
+                  ),
+                ),
+                //
+                _Content(
+                  title: "OverView",
+                  body: Text(
+                    // ignore: unnecessary_string_interpolations
+                    "${movie.overview}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                _Content(
+                  title: "Summary",
+                  body: Table(
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    columnWidths: const {
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(2),
+                    },
+                    border: TableBorder.all(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    children: [
+                      TableRow(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("Adult"),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //
-                  _content(
-                    title: "Genres",
-                    body: Wrap(
-                      spacing: 6.0,
-                      children: movie.genres
-                          .map((e) => Chip(label: Text(e.name)))
-                          .toList(),
-                    ),
-                  ),
-                  //
-                  _content(
-                    title: "OverView",
-                    body: Text(
-                      // ignore: unnecessary_string_interpolations
-                      "${movie.overview}",
-                      style: const TextStyle(
-                        fontSize: 14,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(movie.adult ? "yes" : "No"),
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                  _content(
-                    title: "Summary",
-                    body: Table(
-                      defaultVerticalAlignment:
-                          TableCellVerticalAlignment.middle,
-                      columnWidths: const {
-                        0: FlexColumnWidth(1),
-                        1: FlexColumnWidth(2),
-                      },
-                      border: TableBorder.all(
-                        color: Colors.black12,
-                        borderRadius: BorderRadius.circular(15.0),
+                      //
+                      _tableContent(
+                        title: "Popularity",
+                        content: "${movie.popularity}",
                       ),
-                      children: [
-                        TableRow(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text("Adult"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(movie.adult ? "yes" : "No"),
-                            ),
-                          ],
-                        ),
-                        //
-                        _tableContent(
-                          title: "Popularity",
-                          content: "${movie.popularity}",
-                        ),
-                        //
-                        _tableContent(
-                          title: "Status",
-                          // ignore: unnecessary_string_interpolations
-                          content: "${movie.status}",
-                        ),
-                        //
-                        _tableContent(
-                          title: "Budget",
-                          content: "${movie.budget}",
-                        ),
-                        //
-                        _tableContent(
-                          title: "Revenue",
-                          content: "${movie.revenue}",
-                        ),
-                        //
-                        _tableContent(
-                          title: "TagLine",
-                          // ignore: unnecessary_string_interpolations
-                          content: "${movie.tagline}",
-                        ),
-                      ],
-                    ),
+                      //
+                      _tableContent(
+                        title: "Status",
+                        // ignore: unnecessary_string_interpolations
+                        content: "${movie.status}",
+                      ),
+                      //
+                      _tableContent(
+                        title: "Budget",
+                        content: "${movie.budget}",
+                      ),
+                      //
+                      _tableContent(
+                        title: "Revenue",
+                        content: "${movie.revenue}",
+                      ),
+                      //
+                      _tableContent(
+                        title: "TagLine",
+                        // ignore: unnecessary_string_interpolations
+                        content: "${movie.tagline}",
+                      ),
+                    ],
                   ),
-                ],
-              );
-            }
-            return Container();
-          },
-        ),
+                ),
+              ],
+            );
+          }
+          return Container();
+        },
       );
 }

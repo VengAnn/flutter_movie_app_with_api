@@ -78,7 +78,6 @@ class _MoviePaginationPageState extends State<MoviePaginationPage> {
           builderDelegate: PagedChildBuilderDelegate<MovieModel>(
             itemBuilder: (context, item, index) => ItemMovieWidget(
               movie: item,
-              provider: MovieGetDiscoverProvider(),
               hieghtBackdrop: 300,
               widthBackdrop: double.infinity,
               heightposter: 160,

@@ -47,21 +47,60 @@ class _MovieDiscoverComponentState extends State<MovieDiscoverComponent> {
               itemCount: provider.movies.length,
               itemBuilder: (_, index, __) {
                 final movie = provider.movies[index];
-                return ItemMovieWidget(
-                    movie: movie,
-                    provider: provider,
-                    currentIndex: currentIndex,
-                    hieghtBackdrop: 300,
-                    widthBackdrop: double.infinity,
-                    heightposter: 160,
-                    widthPoster: 100,
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return MovieDetailpPage(id: movie.id);
-                        },
-                      ));
-                    });
+                return Stack(
+                  children: [
+                    ItemMovieWidget(
+                      movie: movie,
+                      // provider: provider,
+                      // currentIndex: currentIndex,
+                      hieghtBackdrop: 300,
+                      widthBackdrop: double.infinity,
+                      heightposter: 160,
+                      widthPoster: 100,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return MovieDetailpPage(id: movie.id);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: Row(
+                        children: provider.movies
+                            .asMap()
+                            .entries
+                            .map<Widget>((entry) {
+                          final index = entry.key;
+                          //final movieItem = entry.value;
+                          // print(entry);
+
+                          //print(index);
+                          return GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              width: currentIndex == index ? 17 : 7,
+                              height: 7,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 3.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: currentIndex == index
+                                    ? Colors.red
+                                    : Colors.grey,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                );
               },
               carouselController: _carouselController,
               options: CarouselOptions(

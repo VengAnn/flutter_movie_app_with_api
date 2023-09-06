@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import '../app_constant.dart';
 
+enum TypeSrcImg { movieDb, external }
+
 class ImageNetworkWidget extends StatelessWidget {
-  const ImageNetworkWidget(
-      {super.key,
-      required this.imageSrc,
-      this.hieght,
-      this.width,
-      required this.radius});
+  const ImageNetworkWidget({
+    super.key,
+    required this.imageSrc,
+    this.hieght,
+    this.width,
+    required this.radius,
+    this.type = TypeSrcImg.movieDb,
+  });
+  final TypeSrcImg type;
   final String imageSrc;
   final double? hieght;
   final double? width;
@@ -17,8 +22,9 @@ class ImageNetworkWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: Image.network(
-        // ignore: unnecessary_brace_in_string_interps
-        '${AppConstants.imageUrlW500}${imageSrc}',
+        type == TypeSrcImg.movieDb
+            ? '${AppConstants.imageUrlW500}${imageSrc}'
+            : imageSrc,
         height: hieght,
         width: width,
         fit: BoxFit.cover,

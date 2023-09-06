@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_with_api/movie/models/movie_detial_model.dart';
-import 'package:movie_app_with_api/movie/provider/movie_get_discover_provider.dart';
 import '../movie/models/movie_model.dart';
 import 'image_widget.dart';
 
 // ignore: must_be_immutable
 class ItemMovieWidget extends Container {
   final MovieModel? movie;
-  // ignore: prefer_typing_uninitialized_variables
-  final provider;
-  final int? currentIndex;
+
   //
   final double hieghtBackdrop;
   final double widthBackdrop;
@@ -25,8 +22,6 @@ class ItemMovieWidget extends Container {
     required this.widthPoster,
     this.movie,
     this.onTap,
-    this.provider,
-    this.currentIndex,
     this.movieDetail,
     super.key,
   });
@@ -105,35 +100,7 @@ class ItemMovieWidget extends Container {
               ],
             ),
           ),
-          Positioned(
-            bottom: 10,
-            right: 10,
-            child: Row(
-              children: MovieGetDiscoverProvider()
-                  .movies
-                  .asMap()
-                  .entries
-                  .map<Widget>((entry) {
-                final index = entry.key;
-                //final movieItem = entry.value;
-                // print(entry);
-                // ignore: avoid_print
-                print(index);
-                return GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: currentIndex == index ? 17 : 7,
-                    height: 7,
-                    margin: const EdgeInsets.symmetric(horizontal: 3.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: currentIndex == index ? Colors.red : Colors.grey,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
+
           Positioned.fill(
             child: InkWell(
               onTap: onTap,

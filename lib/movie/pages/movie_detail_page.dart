@@ -41,6 +41,7 @@ class MovieDetailpPage extends StatelessWidget {
                 //   return Container();
                 // }
 
+                // ignore: unnecessary_null_comparison
                 if (video != null) {
                   return SliverToBoxAdapter(
                     child: _Content(
@@ -166,7 +167,7 @@ class _WidgetAppBar extends SliverAppBar {
                         MaterialPageRoute(
                           builder: (context) {
                             return WebViewAppWidget(
-                              url: movie.homepage,
+                              url: "${movie.homepage}",
                               title: "${movie.title}",
                             );
                           },
@@ -293,7 +294,7 @@ class _WidgetSummary extends SliverToBoxAdapter {
                   title: "Genres",
                   body: Wrap(
                     spacing: 6.0,
-                    children: movie.genres
+                    children: movie.genres!
                         .map((e) => Chip(label: Text(e.name)))
                         .toList(),
                   ),

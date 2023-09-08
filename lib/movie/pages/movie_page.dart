@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_app_with_api/movie/components/movie_now_playig_component.dart';
 import 'package:movie_app_with_api/movie/components/movie_top_rated_component.dart';
 import 'package:movie_app_with_api/movie/pages/movie_pagination_page.dart';
+import 'package:movie_app_with_api/movie/pages/movie_search_page.dart';
 import '../components/movie_discover_component.dart';
 
 class MoviePage extends StatelessWidget {
@@ -20,6 +21,17 @@ class MoviePage extends StatelessWidget {
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
             elevation: 0,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: MovieSearchPage(),
+                  );
+                },
+                icon: const Icon(Icons.search),
+              ),
+            ],
             title: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

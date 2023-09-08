@@ -41,7 +41,7 @@ class _MovieTopRatedComponentState extends State<MovieTopRatedComponent> {
                   itemCount: provider.movies.length,
                   itemBuilder: (context, index) {
                     return ImageNetworkWidget(
-                      type: TypeSrcImg.movieDb,
+                      // type: TypeSrcImg.movieDb,
                       imageSrc: "${provider.movies[index].posterPath}",
                       // hieght: 100,
                       width: 120,

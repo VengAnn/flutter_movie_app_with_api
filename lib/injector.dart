@@ -5,6 +5,7 @@ import 'package:movie_app_with_api/movie/provider/movie_get_discover_provider.da
 import 'package:movie_app_with_api/movie/provider/movie_get_now_playing_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_top_rated_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_videos_provider.dart';
+import 'package:movie_app_with_api/movie/provider/movie_search_provider.dart';
 import 'package:movie_app_with_api/movie/repositories/movie_repository.dart';
 import 'package:movie_app_with_api/movie/repositories/movie_repository_impl.dart';
 import 'app_constant.dart';
@@ -32,6 +33,13 @@ void setUp() {
   //Register for MovieGetVideos
   sl.registerLazySingleton<MovieGetVideosProvider>(
     () => MovieGetVideosProvider(
+      movieRepository: sl(),
+    ),
+  );
+  //
+  //Register for MovieSearch
+  sl.registerLazySingleton<MovieSearchProvider>(
+    () => MovieSearchProvider(
       movieRepository: sl(),
     ),
   );

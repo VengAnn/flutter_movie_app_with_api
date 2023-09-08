@@ -1,33 +1,33 @@
 class MovieDetailModel {
   MovieDetailModel({
     required this.adult,
-    this.backdropPath = '',
+    this.backdropPath,
     required this.budget,
     required this.genres,
-    required this.homepage,
+    this.homepage,
     required this.id,
-    required this.overview,
+    this.overview,
     required this.popularity,
-    this.posterPath = '',
-    required this.releaseDate,
+    this.posterPath,
     required this.revenue,
     required this.status,
     required this.tagline,
     this.title,
+    this.releaseDate,
     required this.voteAverage,
     required this.voteCount,
   });
 
   final bool adult;
-  final String backdropPath;
+  final String? backdropPath;
   final int budget;
-  final List<Genre> genres;
-  final String homepage;
+  final List<Genre>? genres;
+  final String? homepage;
   final int id;
-  final String overview;
+  final String? overview;
   final double popularity;
-  final String posterPath;
-  final DateTime releaseDate;
+  final String? posterPath;
+  final DateTime? releaseDate;
   final int revenue;
   final String status;
   final String tagline;

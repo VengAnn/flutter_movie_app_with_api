@@ -5,6 +5,7 @@ import 'package:movie_app_with_api/movie/pages/movie_page.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_discover_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_now_playing_provider.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_top_rated_provider.dart';
+import 'package:movie_app_with_api/movie/provider/movie_search_provider.dart';
 import 'package:provider/provider.dart';
 import 'movie/repositories/movie_repository.dart';
 
@@ -34,6 +35,10 @@ class App extends StatelessWidget {
         //
         ChangeNotifierProvider(
           create: (_) => sl<MovieGetNowPlayingProvider>(),
+        ),
+        //
+        ChangeNotifierProvider(
+          create: (_) => sl<MovieSearchProvider>(),
         ),
       ],
       child: MaterialApp(

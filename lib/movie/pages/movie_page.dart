@@ -38,13 +38,16 @@ class MoviePage extends StatelessWidget {
           _WigetTitle(
             title: 'Discover Movies',
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (_) {
-                  return const MoviePaginationPage(
-                    type: TypeMovie.discover,
-                  );
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return const MoviePaginationPage(
+                      type: TypeMovie.discover,
+                    );
+                  },
+                ),
+              );
             },
           ),
           //
@@ -85,6 +88,11 @@ class MoviePage extends StatelessWidget {
           ),
           //
           const MovieNowPlayingComponent(),
+          const SliverToBoxAdapter(
+            child: SizedBox(
+              height: 16.0,
+            ),
+          ),
         ],
       ),
     );

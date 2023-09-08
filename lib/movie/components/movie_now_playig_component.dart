@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app_with_api/movie/pages/movie_detail_page.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_now_playing_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../../widgets/image_widget.dart';
 
 class MovieNowPlayingComponent extends StatefulWidget {
@@ -70,7 +70,6 @@ class _MovieNowPlayingComponentState extends State<MovieNowPlayingComponent> {
                                   width: 120,
                                   radius: 15.0,
                                 ),
-                                //
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -130,6 +129,23 @@ class _MovieNowPlayingComponentState extends State<MovieNowPlayingComponent> {
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                          //when click on item on now playing go to detail screen
+                          Positioned.fill(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => MovieDetailpPage(
+                                          id: provider.movies[index].id),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ],

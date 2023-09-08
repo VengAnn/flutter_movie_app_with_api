@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_app_with_api/movie/provider/movie_get_videos_provider.dart';
 import 'package:movie_app_with_api/widgets/image_widget.dart';
 import 'package:movie_app_with_api/widgets/item_movie_widget.dart';
+import 'package:movie_app_with_api/widgets/youtube_player_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../injector.dart';
@@ -21,9 +22,12 @@ class MovieDetailpPage extends StatelessWidget {
           create: (_) =>
               sl<MovieGetDetailProvider>()..getDetail(context, id: id),
         ),
-        ChangeNotifierProvider<MovieGetVideosProvider>(
-          create: (_) =>
-              sl<MovieGetVideosProvider>()..getVideos(context, id: id),
+        // (
+        //   create: (_) =>
+        //       sl<MovieGetVideosProvider>()..getVideos(context, id: id),
+        // ),
+        ChangeNotifierProvider<MovieGetVideosProvider>.value(
+          value: sl<MovieGetVideosProvider>()..getVideos(context, id: id),
         ),
       ],
       builder: (context, child) => Scaffold(
@@ -33,6 +37,10 @@ class MovieDetailpPage extends StatelessWidget {
             Consumer<MovieGetVideosProvider>(
               builder: (_, provider, __) {
                 final video = provider.videos;
+                // if (video == null) {
+                //   return Container();
+                // }
+
                 if (video != null) {
                   return SliverToBoxAdapter(
                     child: _Content(
@@ -52,11 +60,12 @@ class MovieDetailpPage extends StatelessWidget {
                                   child: ImageNetworkWidget(
                                     type: TypeSrcImg.external,
                                     imageSrc: YoutubePlayer.getThumbnail(
-                                        videoId: "${vidio.key}"),
+                                      videoId: "${vidio.key}",
+                                    ),
                                     radius: 10.0,
                                   ),
                                 ),
-                                //
+                                //Design Buttom on thumbnail photo Icon play and
                                 Positioned.fill(
                                   child: Center(
                                     child: Container(
@@ -75,7 +84,25 @@ class MovieDetailpPage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
+                                //when click on trailer call class youtube player to show videos on youtube
+                                Positioned.fill(
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                YouTuberPlayerWidget(
+                                                    youtubeKey: "${vidio.key}"),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
                               ],
                             );
                           },

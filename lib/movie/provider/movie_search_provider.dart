@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:movie_app_with_api/movie/models/movie_model.dart';
 import 'package:movie_app_with_api/movie/repositories/movie_repository.dart';

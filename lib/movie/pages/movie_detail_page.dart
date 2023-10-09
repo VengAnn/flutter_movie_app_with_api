@@ -58,12 +58,34 @@ class MovieDetailpPage extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: ImageNetworkWidget(
-                                    type: TypeSrcImg.external,
-                                    imageSrc: YoutubePlayer.getThumbnail(
-                                      videoId: "${vidio.key}",
+                                  child: Image.network(
+                                    YoutubePlayer.getThumbnail(
+                                      videoId: vidio.key ??
+                                          "", // Ensure vidio.key is not null
                                     ),
-                                    radius: 10.0,
+                                    scale: 1.0,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      // Display a container when an error occurs
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width:
+                                                100, // Specify the width and height of the container
+                                            height: 100,
+                                            color: Colors
+                                                .grey, // You can set any color you prefer
+                                            child: const Center(
+                                              child: Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
                                 ),
                                 //Design Buttom on thumbnail photo Icon play and
